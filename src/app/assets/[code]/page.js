@@ -17,13 +17,13 @@ export default function PublicAssetPage() {
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    fetch("/api/assets")
+    fetch(`/api/public/assets/${code}`)
       .then((r) => r.json())
       .then((data) => {
-        const found = data.assets?.find((a) => a.asset_code === code);
-        if (found) setAsset(found);
+        if (data.asset) setAsset(data.asset);
         setLoading(false);
-      });
+      })
+      .catch(() => setLoading(false));
   }, [code]);
 
   async function handleAiAnalysis() {
