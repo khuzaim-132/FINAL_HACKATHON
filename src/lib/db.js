@@ -11,6 +11,9 @@ function createMockDb() {
     return `${p}-${t}-${r}`;
   };
 
+  const codes = [assetCode(), assetCode(), assetCode(), assetCode(), assetCode(), assetCode(), assetCode(), assetCode()];
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
   const store = {
     users: [
       { id: uuid(), name: "Admin User", email: "admin@example.com", password_hash: "$2a$12$dummy", role: "admin", created_at: daysAgo(30) },
@@ -18,14 +21,14 @@ function createMockDb() {
       { id: uuid(), name: "Bob Technician", email: "bob@example.com", password_hash: "$2a$12$dummy", role: "technician", created_at: daysAgo(20) },
     ],
     assets: [
-      { id: uuid(), asset_code: assetCode(), name: "CNC Milling Machine", description: "Industrial CNC milling machine for metal fabrication", category: "Manufacturing", location: "Building A, Floor 1", status: "operational", qr_code_url: `http://localhost:3000/assets/`, created_at: daysAgo(90), updated_at: daysAgo(5), next_service_date: daysAgo(30).toISOString().split("T")[0] },
-      { id: uuid(), asset_code: assetCode(), name: "HVAC System Unit 3", description: "Central HVAC system for the office building", category: "Electrical", location: "Building A, Roof", status: "operational", qr_code_url: `http://localhost:3000/assets/`, created_at: daysAgo(60), updated_at: daysAgo(10), next_service_date: daysAgo(45).toISOString().split("T")[0] },
-      { id: uuid(), asset_code: assetCode(), name: "Server Rack #7", description: "Main production server rack", category: "IT", location: "Data Center, Row C", status: "issue_reported", qr_code_url: `http://localhost:3000/assets/`, created_at: daysAgo(45), updated_at: daysAgo(2), next_service_date: null },
-      { id: uuid(), asset_code: assetCode(), name: "Forklift Model X2", description: "Electric forklift for warehouse operations", category: "Logistics", location: "Warehouse", status: "under_maintenance", qr_code_url: `http://localhost:3000/assets/`, created_at: daysAgo(30), updated_at: daysAgo(1), next_service_date: daysAgo(15).toISOString().split("T")[0] },
-      { id: uuid(), asset_code: assetCode(), name: "Water Pump Station", description: "Main water pumping station for facility", category: "Plumbing", location: "Basement, Room B2", status: "operational", qr_code_url: `http://localhost:3000/assets/`, created_at: daysAgo(20), updated_at: daysAgo(3), next_service_date: daysAgo(60).toISOString().split("T")[0] },
-      { id: uuid(), asset_code: assetCode(), name: "Solar Panel Array", description: "Rooftop solar panel array 50kW", category: "Electrical", location: "Building B, Roof", status: "under_inspection", qr_code_url: `http://localhost:3000/assets/`, created_at: daysAgo(15), updated_at: daysAgo(0), next_service_date: null },
-      { id: uuid(), asset_code: assetCode(), name: "Fire Alarm System", description: "Building-wide fire alarm and sprinkler system", category: "Safety", location: "Building A, All Floors", status: "operational", qr_code_url: `http://localhost:3000/assets/`, created_at: daysAgo(10), updated_at: daysAgo(7), next_service_date: daysAgo(90).toISOString().split("T")[0] },
-      { id: uuid(), asset_code: assetCode(), name: "Elevator Bank A", description: "Passenger elevators serving floors 1-10", category: "Mechanical", location: "Building A, Core", status: "operational", qr_code_url: `http://localhost:3000/assets/`, created_at: daysAgo(5), updated_at: daysAgo(1), next_service_date: daysAgo(14).toISOString().split("T")[0] },
+      { id: uuid(), asset_code: codes[0], name: "CNC Milling Machine", description: "Industrial CNC milling machine for metal fabrication", category: "Manufacturing", location: "Building A, Floor 1", status: "operational", qr_code_url: `${baseUrl}/assets/${codes[0]}`, created_at: daysAgo(90), updated_at: daysAgo(5), next_service_date: daysAgo(30).toISOString().split("T")[0] },
+      { id: uuid(), asset_code: codes[1], name: "HVAC System Unit 3", description: "Central HVAC system for the office building", category: "Electrical", location: "Building A, Roof", status: "operational", qr_code_url: `${baseUrl}/assets/${codes[1]}`, created_at: daysAgo(60), updated_at: daysAgo(10), next_service_date: daysAgo(45).toISOString().split("T")[0] },
+      { id: uuid(), asset_code: codes[2], name: "Server Rack #7", description: "Main production server rack", category: "IT", location: "Data Center, Row C", status: "issue_reported", qr_code_url: `${baseUrl}/assets/${codes[2]}`, created_at: daysAgo(45), updated_at: daysAgo(2), next_service_date: null },
+      { id: uuid(), asset_code: codes[3], name: "Forklift Model X2", description: "Electric forklift for warehouse operations", category: "Logistics", location: "Warehouse", status: "under_maintenance", qr_code_url: `${baseUrl}/assets/${codes[3]}`, created_at: daysAgo(30), updated_at: daysAgo(1), next_service_date: daysAgo(15).toISOString().split("T")[0] },
+      { id: uuid(), asset_code: codes[4], name: "Water Pump Station", description: "Main water pumping station for facility", category: "Plumbing", location: "Basement, Room B2", status: "operational", qr_code_url: `${baseUrl}/assets/${codes[4]}`, created_at: daysAgo(20), updated_at: daysAgo(3), next_service_date: daysAgo(60).toISOString().split("T")[0] },
+      { id: uuid(), asset_code: codes[5], name: "Solar Panel Array", description: "Rooftop solar panel array 50kW", category: "Electrical", location: "Building B, Roof", status: "under_inspection", qr_code_url: `${baseUrl}/assets/${codes[5]}`, created_at: daysAgo(15), updated_at: daysAgo(0), next_service_date: null },
+      { id: uuid(), asset_code: codes[6], name: "Fire Alarm System", description: "Building-wide fire alarm and sprinkler system", category: "Safety", location: "Building A, All Floors", status: "operational", qr_code_url: `${baseUrl}/assets/${codes[6]}`, created_at: daysAgo(10), updated_at: daysAgo(7), next_service_date: daysAgo(90).toISOString().split("T")[0] },
+      { id: uuid(), asset_code: codes[7], name: "Elevator Bank A", description: "Passenger elevators serving floors 1-10", category: "Mechanical", location: "Building A, Core", status: "operational", qr_code_url: `${baseUrl}/assets/${codes[7]}`, created_at: daysAgo(5), updated_at: daysAgo(1), next_service_date: daysAgo(14).toISOString().split("T")[0] },
     ],
     issues: [],
     maintenance_records: [],

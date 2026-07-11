@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import QRCode from "@/components/QRCode";
 
 export default function AssetDetailPage() {
   const { id } = useParams();
@@ -56,10 +57,13 @@ export default function AssetDetailPage() {
 
           <div className="rounded-xl border bg-white p-6">
             <h2 className="mb-4 text-lg font-semibold">QR Code</h2>
-            <p className="mb-3 text-sm text-zinc-500">
-              Public URL: <a href={asset.qr_code_url} target="_blank" className="text-zinc-900 underline break-all">{asset.qr_code_url}</a>
-            </p>
-            <p className="text-xs text-zinc-400">Scan the QR code to view asset info and report issues.</p>
+            <div className="flex flex-col items-center gap-4">
+              <QRCode url={asset.qr_code_url} size={200} />
+              <p className="text-sm text-zinc-500 break-all text-center">
+                <a href={asset.qr_code_url} target="_blank" className="text-zinc-900 underline">{asset.qr_code_url}</a>
+              </p>
+              <p className="text-xs text-zinc-400 text-center">Scan this QR code to view asset info and report issues.</p>
+            </div>
           </div>
         </div>
 

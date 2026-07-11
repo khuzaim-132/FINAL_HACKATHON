@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import QRCode from "@/components/QRCode";
 
 export default function NewAssetPage() {
   const router = useRouter();
@@ -42,12 +43,15 @@ export default function NewAssetPage() {
         <div className="mx-auto max-w-lg rounded-xl border bg-white p-8 text-center">
           <span className="mb-4 inline-block text-4xl">✅</span>
           <h2 className="mb-2 text-xl font-bold text-zinc-900">Asset Created!</h2>
-          <div className="my-6 rounded-lg bg-zinc-50 p-4 text-left font-mono text-sm">
-            <p><span className="text-zinc-400">Code:</span> <strong>{result.asset_code}</strong></p>
-            <p><span className="text-zinc-400">Name:</span> {result.name}</p>
-            <p><span className="text-zinc-400">Category:</span> {result.category || "-"}</p>
-            <p><span className="text-zinc-400">Location:</span> {result.location || "-"}</p>
-            <p className="mt-2 break-all"><span className="text-zinc-400">QR URL:</span> {result.qr_code_url}</p>
+          <div className="my-6 flex flex-col items-center gap-4">
+            <QRCode url={result.qr_code_url} size={180} />
+            <div className="w-full rounded-lg bg-zinc-50 p-4 text-left font-mono text-sm">
+              <p><span className="text-zinc-400">Code:</span> <strong>{result.asset_code}</strong></p>
+              <p><span className="text-zinc-400">Name:</span> {result.name}</p>
+              <p><span className="text-zinc-400">Category:</span> {result.category || "-"}</p>
+              <p><span className="text-zinc-400">Location:</span> {result.location || "-"}</p>
+              <p className="mt-2 break-all"><span className="text-zinc-400">QR URL:</span> {result.qr_code_url}</p>
+            </div>
           </div>
           <div className="flex gap-3">
             <button
