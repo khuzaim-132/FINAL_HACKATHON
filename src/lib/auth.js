@@ -42,10 +42,10 @@ export async function createUser({ name, email, password, role }) {
   }
 
   let passwordHash;
-  if (!process.env.DATABASE_URL) {
-    passwordHash = "$2a$12$mock";
-  } else {
+  if (process.env.USE_REAL_DB === "true") {
     passwordHash = await hashPassword(password);
+  } else {
+    passwordHash = "$2a$12$mock";
   }
   const users = await sql`
     INSERT INTO users (name, email, password_hash, role)

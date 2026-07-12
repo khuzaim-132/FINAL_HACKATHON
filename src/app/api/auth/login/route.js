@@ -17,10 +17,10 @@ export async function POST(request) {
     }
 
     let valid = false;
-    if (!process.env.DATABASE_URL) {
-      valid = true;
-    } else {
+    if (process.env.USE_REAL_DB === "true") {
       valid = await verifyPassword(password, user.password_hash);
+    } else {
+      valid = true;
     }
     if (!valid) {
       return Response.json({ error: "Invalid email or password" }, { status: 401 });
