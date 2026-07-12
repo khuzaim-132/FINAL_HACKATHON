@@ -67,19 +67,9 @@ CREATE TABLE IF NOT EXISTS maintenance_history (
   timestamp TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE TABLE IF NOT EXISTS alerts (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES users(id),
-  type TEXT NOT NULL,
-  message TEXT,
-  email TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
 CREATE INDEX IF NOT EXISTS idx_issues_asset_id ON issues(asset_id);
 CREATE INDEX IF NOT EXISTS idx_issues_status ON issues(status);
 CREATE INDEX IF NOT EXISTS idx_issues_assigned_to ON issues(assigned_to);
 CREATE INDEX IF NOT EXISTS idx_assets_status ON assets(status);
 CREATE INDEX IF NOT EXISTS idx_assets_asset_code ON assets(asset_code);
 CREATE INDEX IF NOT EXISTS idx_maintenance_history_asset_id ON maintenance_history(asset_id);
-CREATE INDEX IF NOT EXISTS idx_alerts_user_id ON alerts(user_id);

@@ -33,7 +33,6 @@ function createMockDb() {
     issues: [],
     maintenance_records: [],
     maintenance_history: [],
-    alerts: [],
   };
 
   const assetIds = store.assets.map((a) => ({ id: a.id, name: a.name, code: a.asset_code, location: a.location }));
@@ -302,21 +301,6 @@ function createMockDb() {
       insert: (table, cols, vals) => {
         const obj = { id: uuid(), created_at: new Date(), ...Object.fromEntries(cols.map((c, i) => [c, vals[i]])) };
         store.maintenance_records.push(obj);
-        return [obj];
-      },
-    },
-    alerts: {
-      select: (table, conditions) => {
-        let results = [...store.alerts];
-        conditions.forEach((c) => {
-          if (c.col === "user_id") results = results.filter((r) => r.user_id === c.val);
-        });
-        results.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-        return results.slice(0, 10);
-      },
-      insert: (table, cols, vals) => {
-        const obj = { id: uuid(), created_at: new Date(), ...Object.fromEntries(cols.map((c, i) => [c, vals[i]])) };
-        store.alerts.push(obj);
         return [obj];
       },
     },
