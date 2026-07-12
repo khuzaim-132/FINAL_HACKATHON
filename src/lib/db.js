@@ -255,11 +255,17 @@ function createMockDb() {
             });
           } else {
             const selectedCols = raw.split(",").map((s) => s.trim().split(/\s+AS\s+/i)[0].trim());
-            results = results.map((r) => Object.fromEntries(selectedCols.map((c) => {
-              const parts = c.split(".");
-              const colName = parts[parts.length - 1];
-              return [colName, r[colName]];
-            }).filter(([k, v]) => k !== "password_hash" && typeof v !== "object" && v !== undefined)));
+            results = results.map((r) => {
+              const obj = {};
+              selectedCols.forEach((c) => {
+                const parts = c.split(".");
+                const colName = parts[parts.length - 1];
+                if (colName !== "password_hash" && r[colName] !== undefined) {
+                  obj[colName] = r[colName] instanceof Date ? r[colName].toISOString() : r[colName];
+                }
+              });
+              return obj;
+            });
           }
         }
         return results;

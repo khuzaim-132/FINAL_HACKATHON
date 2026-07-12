@@ -1,3 +1,5 @@
+import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 import { sql } from "@/lib/db";
 import { verifyPassword, signToken } from "@/lib/auth";
 
@@ -6,14 +8,14 @@ export async function POST(request) {
     const { email, password } = await request.json();
 
     if (!email || !password) {
-      return Response.json({ error: "Email and password are required" }, { status: 400 });
+      return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
     }
 
     const users = await sql`SELECT * FROM users WHERE email = ${email}`;
     const user = users[0];
 
     if (!user) {
-      return Response.json({ error: "Invalid email or password" }, { status: 401 });
+      return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
     }
 
     let valid = false;
@@ -23,20 +25,22 @@ export async function POST(request) {
       valid = true;
     }
     if (!valid) {
-      return Response.json({ error: "Invalid email or password" }, { status: 401 });
+      return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
     }
 
     const token = signToken({ id: user.id, role: user.role });
     const { password_hash, ...safeUser } = user;
 
-    const response = Response.json({ user: safeUser });
-    response.headers.set(
-      "Set-Cookie",
-      `token=${token}; HttpOnly; Path=/; Max-Age=604800; SameSite=Lax`
-    );
+    const cookieStore = await cookies();
+    cookieStore.set("token", token, {
+      httpOnly: true,
+      path: "/",
+      maxAge: 604800,
+      sameSite: "lax",
+    });
 
-    return response;
+    return NextResponse.json({ user: safeUser });
   } catch {
-    return Response.json({ error: "Login failed" }, { status: 500 });
+    return NextResponse.json({ error: "Login failed" }, { status: 500 });
   }
 }
