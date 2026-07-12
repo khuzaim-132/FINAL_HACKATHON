@@ -444,10 +444,15 @@ function parseMockSQL(sql, params) {
   return null;
 }
 
+let mockDbInstance = null;
+
 export function sql(strings, ...values) {
   if (process.env.DATABASE_URL) {
     const client = neon(process.env.DATABASE_URL);
     return client(strings, ...values);
   }
-  return createMockDb()(strings, ...values);
+  if (!mockDbInstance) {
+    mockDbInstance = createMockDb();
+  }
+  return mockDbInstance(strings, ...values);
 }
