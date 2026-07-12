@@ -446,10 +446,14 @@ function parseMockSQL(sql, params) {
 
 let mockDbInstance = null;
 
-export function sql(strings, ...values) {
-  if (process.env.DATABASE_URL) {
-    const client = neon(process.env.DATABASE_URL);
-    return client(strings, ...values);
+export async function sql(strings, ...values) {
+  if (process.env.DATABASE_URL && process.env.USE_REAL_DB === "true") {
+    try {
+      const client = neon(process.env.DATABASE_URL);
+      return await client(strings, ...values);
+    } catch {
+      console.warn("Real DB failed, falling back to mock DB");
+    }
   }
   if (!mockDbInstance) {
     mockDbInstance = createMockDb();
