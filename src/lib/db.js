@@ -248,16 +248,20 @@ function createMockDb() {
         });
         const cols = rawSQL.match(/SELECT\s+(.*?)\s+FROM/i);
         if (cols) {
-          const selectedCols = cols[1].split(",").map((s) => s.trim().split(/\s+AS\s+/i)[0].trim());
-          results = results.map((r) => Object.fromEntries(selectedCols.map((c) => {
-            if (c === "*") return [c, r];
-            const parts = c.split(".");
-            const colName = parts[parts.length - 1];
-            return [colName, r[colName]];
-          }).filter(([k]) => k !== "*").flatMap(([k, v]) => {
-            if (k === "password_hash" || typeof v === "object") return [];
-            return [[k, v]];
-          })));
+          const raw = cols[1].trim();
+          if (raw === "*") {
+            results = results.map((r) => {
+              const { password_hash, ...rest } = r;
+              return rest;
+            });
+          } else {
+            const selectedCols = raw.split(",").map((s) => s.trim().split(/\s+AS\s+/i)[0].trim());
+            results = results.map((r) => Object.fromEntries(selectedCols.map((c) => {
+              const parts = c.split(".");
+              const colName = parts[parts.length - 1];
+              return [colName, r[colName]];
+            }).filter(([k, v]) => k !== "password_hash" && typeof v !== "object" && v !== undefined)));
+          }
         }
         return results;
       },
